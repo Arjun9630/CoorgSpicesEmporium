@@ -69,6 +69,18 @@
             margin: 15px auto 0;
             border-radius: 1px;
         }
+
+        .cart-badge {
+            position: absolute;
+            top: 40px;
+            right: 65px;
+            background-color: #ff3e3e;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
     </style>
 </head>
 
@@ -89,6 +101,9 @@
             </div>
             <button class="cart-button" onclick="location.href='{% url "cart" %}';">
                 <img src="{% static 'shop/imageSrc/cart.png' %}" alt="Cart" class="cart-icon">
+                {% if cart_item_count > 0 %}
+                <span class="cart-badge">{{ cart_item_count }}</span>
+                {% endif %}
             </button>
         </nav>
     </div>
