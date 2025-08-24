@@ -250,3 +250,11 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.variant.product.name} - {self.variant.weight} (x{self.quantity})"
+
+class HomePageFeatured(models.Model):
+    title = models.CharField(max_length=100, default="Featured Products")
+    products = models.ManyToManyField(Product, help_text="Select products to display on the homepage")
+    max_items = models.PositiveIntegerField(default=12, help_text="Limit number of products displayed")
+
+    def __str__(self):
+        return self.title

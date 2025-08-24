@@ -5,14 +5,23 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth.views import LoginView
 from django.contrib import messages
 from django.db.models import Min
-from .models import Product, CustomerProfile, Address
+from .models import Product, CustomerProfile, Address, HomePageFeatured
 
 
 # ====================== BASIC VIEWS ======================
 
 def home(request):
-    products = Product.objects.all()
-    return render(request, 'shop/index.html', {'products': products})
+    # Fetch only one "Featured" entry (you can extend later if you want multiple sections)
+    featured = HomePageFeatured.objects.first()
+
+    products = []
+    if featured:
+        products = featured.products.all()[:featured.max_items]
+
+    return render(request, 'shop/index.html', {
+        'products': products,
+        'featured_title': featured.title if featured else "Featured Products"
+    })
 
 
 from .models import Product, ProductVariant  # make sure ProductVariant is imported

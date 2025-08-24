@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Category, ProductImage, ProductVariant, CustomerProfile, Address, Order, OrderItem
+from .models import Product, Category, ProductImage, ProductVariant, CustomerProfile, Address, Order, OrderItem, HomePageFeatured
 
 # Inline for adding product variants (e.g., 100g, 250g) inside product admin
 class ProductVariantInline(admin.TabularInline):
@@ -21,6 +21,11 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ("order_number", "user__username", "user__email")
     inlines = [OrderItemInline]
 
+class HomePageFeaturedAdmin(admin.ModelAdmin):
+    filter_horizontal = ('products',)   # Gives a nice multi-select box
+    list_display = ('title', 'max_items')
+
+
 # Register models
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category)
@@ -28,3 +33,4 @@ admin.site.register(ProductImage)
 admin.site.register(CustomerProfile)
 admin.site.register(Address)
 admin.site.register(Order, OrderAdmin)
+admin.site.register(HomePageFeatured, HomePageFeaturedAdmin)
