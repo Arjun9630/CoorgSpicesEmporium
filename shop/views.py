@@ -488,3 +488,11 @@ def my_orders(request):
 def order_details(request, order_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
     return render(request, "shop/order_details.html", {"order": order})
+
+
+#====================== DEBUG VIEW ======================
+from django.conf import settings
+from django.http import HttpResponse
+
+def check_storage(request):
+    return HttpResponse(f"DEFAULT_FILE_STORAGE: {settings.DEFAULT_FILE_STORAGE}")
