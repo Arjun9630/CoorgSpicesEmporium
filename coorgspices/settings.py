@@ -93,8 +93,7 @@ if DEBUG:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 else:
-    # let S3Boto3Storage handle MEDIA_URL automatically
-    pass
+    MEDIA_URL = f"https://{config("AWS_STORAGE_BUCKET_NAME")}.s3.{config("AWS_S3_REGION_NAME")}.amazonaws.com/"
 
 # 🔑 Site & Auth
 SITE_ID = config("SITE_ID", default=1, cast=int)
