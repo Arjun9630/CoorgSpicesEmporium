@@ -89,8 +89,8 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # ✅ Whitenoise compression
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # 🔑 Site & Auth
 SITE_ID = config("SITE_ID", default=1, cast=int)
