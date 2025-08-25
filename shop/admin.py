@@ -1,15 +1,34 @@
 from django.contrib import admin
-from .models import Product, Category, ProductImage, ProductVariant, CustomerProfile, Address, Order, OrderItem, HomePageFeatured
+from .models import (
+    Product, Category, ProductImage, ProductVariant,
+    CustomerProfile, Address, Order, OrderItem, HomePageFeatured
+)
 
-# Inline for adding product variants (e.g., 100g, 250g) inside product admin
+# ================= Product Inlines =================
+
 class ProductVariantInline(admin.TabularInline):
     model = ProductVariant
-    extra = 1
+    extra = 1  # empty slots for variants
 
-# Product admin to include variant inline editor
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+    extra = 1  # empty slots for additional images
+    fields = ('image', 'alt_text')
+
+# ================= Product Admin =================
+
 class ProductAdmin(admin.ModelAdmin):
-    inlines = [ProductVariantInline]
+    list_display = ('name', 'category', 'created_at')
+    prepopulated_fields = {"slug": ("name",)}
+    inlines = [ProductVariantInline, ProductImageInline]
 
+# ================= Category Admin =================
+
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    fields = ('name', 'image')  # so you can upload image directly in admin
+
+# ================= Order Admin =================
 
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
@@ -21,15 +40,16 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ("order_number", "user__username", "user__email")
     inlines = [OrderItemInline]
 
+# ================= HomePage Featured =================
+
 class HomePageFeaturedAdmin(admin.ModelAdmin):
-    filter_horizontal = ('products',)   # Gives a nice multi-select box
+    filter_horizontal = ('products',)
     list_display = ('title', 'max_items')
 
+# ================= Register Models =================
 
-# Register models
 admin.site.register(Product, ProductAdmin)
-admin.site.register(Category)
-admin.site.register(ProductImage)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(CustomerProfile)
 admin.site.register(Address)
 admin.site.register(Order, OrderAdmin)
