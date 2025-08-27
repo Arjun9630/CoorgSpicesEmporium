@@ -24,7 +24,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'shop.apps.ShopConfig',
-    'storages',
+    'cloudinary',
+    'cloudinary_storage',
     'whitenoise.runserver_nostatic',
 ]
 
@@ -38,7 +39,6 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
 ]
 
 ROOT_URLCONF = 'coorgspices.urls'
@@ -65,8 +65,8 @@ WSGI_APPLICATION = 'coorgspices.wsgi.application'
 DATABASES = {
     "default": dj_database_url.config(
         default=config("DATABASE_URL"),
-        conn_max_age=600,  # ✅ keeps connections alive for performance
-        ssl_require=True   # ✅ required for Render's Postgres
+        conn_max_age=600,
+        ssl_require=True
     )
 }
 
@@ -87,15 +87,17 @@ USE_TZ = True
 # 📂 Static & Media
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
-
-# ✅ Whitenoise compression
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-if DEBUG:
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-else:
-    MEDIA_URL = f"https://{config('AWS_STORAGE_BUCKET_NAME')}.s3.{config('AWS_S3_REGION_NAME')}.amazonaws.com/"
+# Media settings (Cloudinary)
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+MEDIA_URL = '/media/'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config("CLOUDINARY_CLOUD_NAME"),
+    'API_KEY': config("CLOUDINARY_API_KEY"),
+    'API_SECRET': config("CLOUDINARY_API_SECRET"),
+}
 
 # 🔑 Site & Auth
 SITE_ID = config("SITE_ID", default=1, cast=int)
@@ -108,18 +110,3 @@ LOGIN_REDIRECT_URL = config("LOGIN_REDIRECT_URL", default="/")
 ACCOUNT_LOGOUT_REDIRECT_URL = config("ACCOUNT_LOGOUT_REDIRECT_URL", default="/")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# AWS S3 Settings for Media Files
-# import os
-# from dotenv import load_dotenv
-
-# load_dotenv()  # this will read from .env file
-
-AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
-AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME")
-
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-AWS_QUERYSTRING_AUTH = False
-AWS_DEFAULT_ACL = "public-read" # Add this line to force public read access
