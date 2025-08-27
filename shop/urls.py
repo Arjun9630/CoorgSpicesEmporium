@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 from django.contrib.auth.views import LogoutView
 from .views import CustomLoginView
-from .views import profile_view, check_storage
+from .views import profile_view
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -23,7 +23,6 @@ urlpatterns = [
     path('confirmation/', views.order_confirmation, name='order_confirmation'),
     path("my-orders/", views.my_orders, name="my_orders"),
     path("order-details/<int:order_id>/", views.order_details, name="order_details"),
-    path('check-storage/', check_storage),
 ]
 
 from .views import (

@@ -542,7 +542,7 @@
 
             <!-- Thumbnails -->
             <div class="thumbnail-strip" id="thumbnailContainer">
-
+                
                 {% for img in product.images.all|dictsort:"alt_text" %}
                 {% if img.alt_text == 'Main_Image' %}
                 <img src="{{ img.image.url }}" class="thumb-image selected"

@@ -14,7 +14,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True, blank=True, null=True)
+    slug = models.SlugField(unique=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField()
     image = models.ImageField(upload_to='products/')
@@ -226,7 +226,7 @@ class Order(models.Model):
     payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default='Pending')
     created_at = models.DateTimeField(auto_now_add=True)
 
-    order_number = models.CharField(max_length=8, unique=True, editable=False, null=True, blank=True)
+    order_number = models.CharField(max_length=8, unique=True, editable=False)
 
     def save(self, *args, **kwargs):
         if not self.order_number:
