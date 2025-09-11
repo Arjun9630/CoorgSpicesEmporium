@@ -159,8 +159,10 @@
             z-index: 0;
             text-decoration: none;
         }
-
+        
         .back-button img {
+            position: absolute;
+            left: -25px;
             width: 40px;
             height: 40px;
             transition: opacity 0.3s ease, transform 0.2s ease;
@@ -169,6 +171,18 @@
         .back-button img:hover {
             opacity: 0.7;
             transform: scale(1.1);
+        }
+
+        .cart-badge {
+            position: fixed;
+            top: 38px;
+            right: -5px;
+            background-color: #ff3e3e;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 50%;
         }
     </style>
 </head>
