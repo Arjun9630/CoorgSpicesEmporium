@@ -95,6 +95,10 @@ STORAGES = {
     "default": {
         "BACKEND": "coorgspices.storages.MediaStorage",
     },
+
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",  # WhiteNoise
+    },
 }
 
 AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
