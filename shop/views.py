@@ -49,7 +49,8 @@ def product_detail(request, slug):
 
 def register(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
+        name = request.POST.get('name')
+        email = request.POST.get('email')
         password = request.POST.get('password')
         password_confirmation = request.POST.get('password_confirmation')
 
@@ -57,18 +58,31 @@ def register(request):
             messages.error(request, "Passwords do not match.")
             return render(request, 'shop/register.html')
 
-        if User.objects.filter(username=username).exists():
-            messages.error(request, "Username already exists.")
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Email already exists.")
             return render(request, 'shop/register.html')
 
-        user = User.objects.create_user(username=username, password=password)
+        # split name into first and last names
+        first_name = name.split(' ')[0]
+        last_name = ' '.join(name.split(' ')[1:]) if len(name.split(' ')) > 1 else ''
 
+        # use email as username
+        user = User.objects.create_user(
+            username=email,
+            email=email,
+            password=password,
+            first_name=first_name,
+            last_name=last_name
+        )
+
+        # add to Customer group if it exists
         try:
             customer_group = Group.objects.get(name='Customer')
             user.groups.add(customer_group)
         except Group.DoesNotExist:
             pass
 
+        # log the user in
         backend = get_backends()[0]
         user.backend = f"{backend.__module__}.{backend.__class__.__name__}"
         login(request, user)
